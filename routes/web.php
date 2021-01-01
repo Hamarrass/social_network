@@ -13,9 +13,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/posts/{id}/{author?}',function($id,$author='hassan'){
+
+    $posts =[
+        1=>['title'=>'<a>learn laravel 6</a>'],
+        2=>['title'=>'learn Angular 8'],
+    ];
+
+    return  view('posts.show',['data'=>$posts[$id],'author'=>$author]);
+});
+
+/*
 Route::get('/', function () {
     return view('home ');
 });
-Route::get('/about', function () {
-    return view('about ');
-});
+*/
+
+/*if you don t want to pass any params  it will be better to use this method*/
+Route::view('/', 'home');
+/*and the same for this method*/
+/*Route::get('/about', function () {
+    return view('about  ');
+});*/
+Route::view('/about', '');
