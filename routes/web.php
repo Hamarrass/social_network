@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,26 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/posts/{id}/{author?}',function($id,$author='hassan'){
-
-    $posts =[
-        1=>['title'=>'<a>learn laravel 6</a>'],
-        2=>['title'=>'learn Angular 8'],
-    ];
-
-    return  view('posts.show',['data'=>$posts[$id],'author'=>$author]);
-});
-
-/*
-Route::get('/', function () {
-    return view('home ');
-});
-*/
 
 /*if you don t want to pass any params  it will be better to use this method*/
-Route::view('/', 'home');
-/*and the same for this method*/
-/*Route::get('/about', function () {
-    return view('about  ');
-});*/
-Route::view('/about', '');
+Route::get('/', [HomeController::class,'home'])->name('home');
+
+Route::get('/about', [HomeController::class , 'about'])->name('about');
+Route::resource('/posts', PostController::class);

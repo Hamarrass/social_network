@@ -93,6 +93,7 @@ return [
 
     ],
 
+    /* you can add oracl here */
     /*
     |--------------------------------------------------------------------------
     | Migration Repository Table
