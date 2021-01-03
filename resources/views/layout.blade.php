@@ -14,15 +14,18 @@
                    {{session()->get('status')}}
                </h3>
             @endif
-            <ul>
-                <li><a href="{{route('home')}}"> Home  </a></li>
-                <li><a href="{{route('about')}}"> About </a></li>
-                <li><a href="{{route('posts.index')}}"> posts </a></li>
-                <li><a href="{{route('posts.create')}}"> new post </a></li>
-            </ul>
+            <nav class="navbar navbar-expand navbar-light bg-light">
+                <ul class="nav navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="{{route('home')}}"> Home  </a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{route('about')}}"> About </a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{route('posts.index')}}"> posts </a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{route('posts.create')}}"> new post </a></li>
+                </ul>
+            </nav>
 
-
+          <div class="container ">
             @yield('content')
+          </div>
         </body>
         <script src="{{mix('/js/app.js')}}"></script>
 </html>
