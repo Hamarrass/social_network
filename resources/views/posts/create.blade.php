@@ -1,18 +1,13 @@
 @extends('layout')
 @section('content')
 
+<!-- give you how man word do you want so  us this lorem(2or10)-->
 
 <form action="{{route('posts.store')}}" method="POST">
-@csrf
-    <div>
-        <label for="">Your title</label>
-        <input  name="title" id="title" type="text">
-    </div>
 
-    <div>
-        <label for="content">Your content</label>
-        <input name="content" id="content" type="text">
-    </div>
+    @csrf
+    @include('posts.form')
+
     <button type="submit"> Add post</button>
 </form>
 
