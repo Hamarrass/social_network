@@ -3,19 +3,38 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    public function home(){
-
-        return  view('home');
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
     }
 
-    public function about(){
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function index()
+    {
 
-       return view('about');
+         /*dd(Auth::id(),Auth::user()->email);*/
+             /*dd(Auth::check());*/
+        return view('home');
     }
 
+    public function about()
+    {
 
-
+         /*dd(Auth::id(),Auth::user()->email);*/
+             /*dd(Auth::check());*/
+        return view('about');
+    }
 }

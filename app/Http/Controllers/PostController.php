@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePost;
 use App\Models\Post;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Requests\StorePost;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth')->except('index');
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +22,12 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        /* DB::connection()->enableQueryLog();
+         dd(DB::getQueryLOg());*/
+            $posts = Post::with('comment')->get();
+
+
+
         return view('posts.index',compact('posts'));
     }
 

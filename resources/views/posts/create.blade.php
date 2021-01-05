@@ -1,4 +1,5 @@
-@extends('layout')
+@extends('layouts.app')
+
 @section('content')
 
 <!-- give you how man word do you want so  us this lorem(2or10)-->
