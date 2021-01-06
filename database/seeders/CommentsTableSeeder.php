@@ -13,8 +13,14 @@ class CommentsTableSeeder extends Seeder
      */
     public function run()
     {
+
         $posts = \App\Models\Post::all();
-         \App\Models\Comment::factory(10)->make()->each(function($comment) use ($posts){
+        if($posts->count() ==  0){
+            $this->command->info('please create some posts');
+            return ;
+        }
+        $nbrComments= (int)$this->command->ask("how many of comments you want generate ?" , 100);
+         \App\Models\Comment::factory($nbrComments)->make()->each(function($comment) use ($posts){
             $comment->post_id= $posts->random()->id ;
             $comment->save();
          });
