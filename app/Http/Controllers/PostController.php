@@ -24,13 +24,31 @@ class PostController extends Controller
     {
         /* DB::connection()->enableQueryLog();
          dd(DB::getQueryLOg());*/
-            $posts = Post::with('comment')->get();
-
-
-
-        return view('posts.index',compact('posts'));
+        $posts = Post::withCount('comments')->orderBy('updated_at','desc')->get();
+        $tab='list';
+        return view('posts.index',compact('posts','tab'));
     }
 
+
+    public function archive()
+    {
+        /* DB::connection()->enableQueryLog();
+         dd(DB::getQueryLOg());*/
+        $posts = Post::onlyTrashed('comments')->orderBy('updated_at','desc')->get();
+        $tab='archive';
+        return view(
+            'posts.index'
+            ,compact('posts','tab'));
+    }
+
+    public function all()
+    {
+        /* DB::connection()->enableQueryLog();
+         dd(DB::getQueryLOg());*/
+        $posts = Post::withTrashed()->withCount('comments')->orderBy('updated_at','desc')->get();
+        $tab='all';
+        return view('posts.index',compact('posts','tab'));
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -117,10 +135,25 @@ class PostController extends Controller
     public function destroy(Request $request,  $id)
     {
 
-        $post =Post::destroy($id);
+        $post =Post::find($id);
+        $post->delete();
 
         $request->session()->flash('status','was deleted seccefully');
         return redirect()->route('posts.index');
 
     }
+    public function restore($id){
+
+       $post=Post::onlyTrashed()->where('id',$id)->first();
+       $post->restore();
+
+       return back();
+    }
+
+    public function forcedelete($id){
+       $post=Post::onlyTrashed()->where('id',$id)->first();
+       $post->forceDelete();
+       return back() ;
+    }
+
 }
