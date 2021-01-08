@@ -22,6 +22,10 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function posts(){
+          return $this->hasMany(Post::class);
+    }
+
     /**
      * The attributes that should be hidden for arrays.
      *

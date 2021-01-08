@@ -3,41 +3,64 @@
 
 @section('content')
 
-
-<h1>List of posts</h1>
-
-<ul class="list-group">
+<nav class="nav nav-tabs nav-stacked my-5">
+    <a class="nav-link @if($tab== 'list') active @endif" href="/posts">List</a>
+    <a class="nav-link @if($tab== 'archive') active @endif" href="/posts/archive">Archive</a>
+    <a class="nav-link @if($tab== 'all') active @endif" href="/posts/all"> All</a>
+</nav>
+<div class="my-3">
+    <h4>{{$posts->count()}} post(s)</h4>
+</div>
     @forelse($posts  as $post)
-    <li class="list-group-item">
-        <a href="{{route('posts.show',['post'=>$post->id])}}">{{$post->title}}   </a>
-        <p>{{$post->content}}     </p>
-        <em>{{$post->created_at}} </em>
-      @if($post->comment_count)
-        <div>
-              <span class="badge badge-success">{{$post->comment_count}} comments</span>
-        </div>
-      @else
-        <div>
-            <span class="badge badge-danger">  no comment</span>
-      </div>
-      @endif
+    <p>
+        <h3>
+          <a href="{{route('posts.show',['post'=>$post->id])}}">{{$post->title}}   </a>
+        </h3>
+      @if($post->comments_count)
 
-        <em> <a class="btn btn-warning" href="{{route('posts.edit',['post'=>$post->id])}}">Edite this post</a></em>
-        <em>
-            <form  style="display:inline" action="{{route('posts.destroy',['post'=>$post->id])}}" method="POST">
-               @csrf
-                @method('DELETE')
-              <button class="btn btn-danger" type="submit">Delete</button>
-            </form>
-        </em>
-    </li>
+            <p class="badge badge-success">{{$post->comments_count}} comments</p>
+
+      @else
+
+            <p class="badge badge-danger">  no comment</p>
+
+      @endif
+      <p>
+        <div class='text-muted'>
+          {{$post->updated_at->diffForHumans()}} by {{$post->user->name}}
+        </div>
+      </p>
+        <a class="btn btn-warning" href="{{route('posts.edit',['post'=>$post->id])}}">
+            Edite this post
+        </a>
+
+        @if(!$post->deleted_at)
+        <form  style="display:inline" action="{{route('posts.destroy',['post'=>$post->id])}}" method="POST">
+            @csrf
+            @method('DELETE')
+            <button class="btn btn-danger" type="submit">Delete</button>
+        </form>
+       @else
+       <form  style="display:inline" action="{{URL('/posts/'.$post->id.'/restore')}}" method="POST">
+         @csrf
+          @method('PATCH')
+          <button class="btn btn-success" type="submit">Restor</button>
+       </form>
+
+       <form  style="display:inline" action="{{URL('/posts/'.$post->id.'/forcedelete')}}" method="POST">
+        @csrf
+         @method('DELETE')
+         <button class="btn btn-danger" type="submit">force delete</button>
+      </form>
+       @endif
+    </p>
     @empty
 
     <span class="badge badge-danger">posts is empty </span>
     @endforelse
 
 
-</ul>
+
 
 
 

@@ -19,8 +19,11 @@ use App\Http\Controllers\PostController;
 
 /*if you don t want to pass any params  it will be better to use this method*/
 Route::get('/', [HomeController::class,'home'])->name('home');
-
 Route::get('/about', [HomeController::class , 'about'])->name('about');
+Route::delete('/posts/{id}/forcedelete',[PostController::class,'forcedelete']);
+Route::patch('/posts/{id}/restore' , [PostController::class ,'restore']);
+Route::get('/posts/archive',[PostController::class ,'archive']);
+Route::get('/posts/all',[PostController::class ,'all']);
 Route::resource('/posts', PostController::class);
 
 Auth::routes();
