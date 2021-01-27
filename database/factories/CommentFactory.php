@@ -23,6 +23,7 @@ class CommentFactory extends Factory
     {
         return [
             'content' => $this->faker->text,
+            'updated_at'=>$this->faker->dateTimeBetween('-5 months')
         ];
     }
 }

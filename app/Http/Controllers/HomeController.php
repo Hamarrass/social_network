@@ -37,4 +37,8 @@ class HomeController extends Controller
              /*dd(Auth::check());*/
         return view('about');
     }
+
+    public function secret(){
+         return view('secret');
+    }
 }

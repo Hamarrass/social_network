@@ -25,9 +25,8 @@ class PostFactory extends Factory
         $title =$this->faker->realText(67);
         return [
             'title'   =>$title,
-            'slug'    => Str::slug($title ,'-'),
             'content' => $this->faker->text,
-            'active'  => $this->faker->boolean
+            'updated_at'=>$this->faker->dateTimeBetween('-5 years')
         ];
     }
 }
