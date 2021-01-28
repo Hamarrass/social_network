@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePost;
@@ -29,8 +30,11 @@ class PostController extends Controller
             $posts = [Post::withCount('comments')]== bulder->orderBy('updated_at','desc')->get();
          */
         $posts = Post::withCount('comments')->get();
+        //mostCommented function you will find it in  model Post
+        $mostCommented = Post::mostCommented()->take(5)->get();
+        $mostUsersActive=User::usersActive()->take(5)->get();
         $tab='list';
-        return view('posts.index',compact('posts','tab'));
+        return view('posts.index',compact('posts','tab','mostCommented','mostUsersActive'));
     }
 
 

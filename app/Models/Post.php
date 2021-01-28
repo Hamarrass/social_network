@@ -5,8 +5,9 @@ namespace App\Models;
 use App\Models\Comment;
 use App\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Post extends Model
 {
@@ -21,6 +22,13 @@ class Post extends Model
         }
     public function user(){
         return $this->belongsTo(User::class);
+    }
+
+    public function scopeMostCommented(Builder $query){
+       return $query->withCount('comments')->orderBy('comments_count','desc');
+    }
+    public function scopeUserMostPosted(Builder $query){
+       return $query->withCount('user')->orderBy('user_count','desc');
     }
 
     public static function boot(){
