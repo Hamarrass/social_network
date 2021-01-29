@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Comment;
+use App\Scopes\AdminShowDeleteScope;
 use App\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -27,13 +28,10 @@ class Post extends Model
     public function scopeMostCommented(Builder $query){
        return $query->withCount('comments')->orderBy('comments_count','desc');
     }
-    public function scopeUserMostPosted(Builder $query){
-       return $query->withCount('user')->orderBy('user_count','desc');
-    }
 
     public static function boot(){
+        static::addGlobalScope(new AdminShowDeleteScope);
         parent::boot();
-
         static::addGlobalScope(new LatestScope);
 
         static::deleting(function(Post $post){

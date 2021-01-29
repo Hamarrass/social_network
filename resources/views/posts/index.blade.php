@@ -4,18 +4,27 @@
 
 <div class="row">
     <div class="col-8">
-        <nav class="nav nav-tabs nav-stacked my-5">
+        {{-- <nav class="nav nav-tabs nav-stacked my-5">
             <a class="nav-link @if($tab== 'list') active @endif" href="/posts">List</a>
             <a class="nav-link @if($tab== 'archive') active @endif" href="/posts/archive">Archive</a>
             <a class="nav-link @if($tab== 'all') active @endif" href="/posts/all"> All</a>
-        </nav>
+        </nav> --}}
         <div class="my-3">
             <h4>{{$posts->count()}} post(s)</h4>
         </div>
             @forelse($posts  as $post)
             <p>
                 <h3>
-                  <a href="{{route('posts.show',['post'=>$post->id])}}">{{$post->title}}   </a>
+                  <a href="{{route('posts.show',['post'=>$post->id])}}">
+                    @if($post->trashed())
+                    <del>
+                      {{$post->title}}
+                    </del>
+                    @else
+                    {{$post->title}}
+                    @endif
+
+                  </a>
                 </h3>
               @if($post->comments_count)
 
@@ -99,6 +108,23 @@
             </div>
             <ul class="list-group list-group-flush">
                 @foreach ($mostUsersActive as $user)
+
+                 <li class="list-group-item">
+                     <span class="badge badge-info">{{$user->posts_count}}</span>
+                     <a href="http://">{{$user->name}}</a>
+
+                </li>
+
+                @endforeach
+            </ul>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h4 class="card-title">Users Active In LastMonth</h4>
+            </div>
+            <ul class="list-group list-group-flush">
+                @foreach ($usersActiveInLastMonth as $user)
 
                  <li class="list-group-item">
                      <span class="badge badge-info">{{$user->posts_count}}</span>

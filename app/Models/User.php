@@ -33,6 +33,16 @@ class User extends Authenticatable
 
     }
 
+    public function scopeUsersActiveInLastMonth(Builder $query){
+
+        return $query->withCount(['posts'=>function(Builder $query){
+            $query->whereBetween(static::CREATED_AT,[now()->subMonths(1),now()]);
+        }])
+        ->having('posts_count','>',6)
+        ->orderBy('posts_count',"desc");
+
+    }
+
     /**
      * The attributes that should be hidden for arrays.
      *
