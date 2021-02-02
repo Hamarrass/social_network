@@ -4,13 +4,15 @@
         <p class="text-muted">{{$text}}</p>
     </div>
     <ul class="list-group list-group-flush">
-        @foreach ($items as $item)
-
-         <li class="list-group-item">
-            {{-- <span class="badge badge-info">{{$item->posts_count}}</span> --}}
-             <a href="http://">{{$item}}</a>
-         </li>
-
-        @endforeach
+        @if(!empty(trim($slot)))
+            {{$slot}}
+        @else
+            @foreach ($items as $item)
+            <li class="list-group-item">
+                {{-- <span class="badge badge-info">{{$item->posts_count}}</span> --}}
+                <a href="http://">{{$item}}</a>
+            </li>
+            @endforeach
+        @endif
     </ul>
 </div>

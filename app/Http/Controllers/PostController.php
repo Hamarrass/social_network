@@ -35,6 +35,7 @@ class PostController extends Controller
         $mostUsersActive=User::usersActive()->take(5)->get();
         $tab='list';
         $usersActiveInLastMonth=User::usersActiveInLastMonth()->take(5)->get();
+
         return view('posts.index',compact('posts','tab','mostCommented','mostUsersActive','usersActiveInLastMonth'));
     }
 

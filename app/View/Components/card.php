@@ -14,7 +14,7 @@ class card extends Component
      *
      * @return void
      */
-    public function __construct($title, $text , $items)
+    public function __construct($title, $text = null , $items= null)
     {
         $this->title = $title;
         $this->text = $text;

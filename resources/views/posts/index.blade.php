@@ -28,7 +28,7 @@
                       {{$post->title}}
                     </del>
                     @else
-                    {{$post->title}}
+                      {{$post->title}}
                     @endif
 
                   </a>
@@ -80,39 +80,32 @@
                  <x-badge type="success">You can't delete this post !</x-badge>
             @endforelse
 
-        </div>
+   </div>
     <div class="col-4">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Post most Commented</h4>
-            </div>
-            <ul class="list-group list-group-flush">
-                @foreach ($mostCommented as $post)
-                  <li class="list-group-item">
-                      <x-badge type="dark">{{$post->comments_count}}</x-badge>
-                     <a href="http://">{{$post->title}}</a>
-                  </li>
-                @endforeach
-            </ul>
 
-        </div>
+        <x-card title="Post most Commented">
+            @foreach($mostCommented as $post)
+            <li class="list-group-item">
+                <x-badge type="dark">{{$post->comments_count}}</x-badge>
+                <a href="http://">{{$post->title}}</a>
+            </li>
+            @endforeach
+        </x-card>
 
-    <x-card
-      title ="Most Users"
-      text  ="Most Users post writen"
-      :items="collect($mostUsersActive)->pluck('name')">
-    </x-card>
 
-    <x-card
-      title  = "Most Users Active"
-      text   = "Most Users Active In Last Month"
-      :items =  "collect($usersActiveInLastMonth)->pluck('name')">
-    </x-card>
+        <x-card
+            title="Most Users"
+            text="Most Users post writen"
+            :items="collect($mostUsersActive)->pluck('name')">
+        </x-card>
+
+          <x-card
+            title="Most Users Active"
+            text="Most Users Active In Last Month"
+            :items="collect($usersActiveInLastMonth)->pluck('name')">
+        </x-card>
 
     </div>
 </div>
-
-
-
 
 @endsection
