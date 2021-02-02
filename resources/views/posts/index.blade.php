@@ -12,8 +12,15 @@
         <div class="my-3">
             <h4>{{$posts->count()}} post(s)</h4>
         </div>
+
             @forelse($posts  as $post)
             <p>
+                @if($post->created_at->diffInHours() <1 )
+                     <x-badge type="success">new</x-badge>
+                   @else
+                    <x-badge  type="dark">old</x-badge>
+                @endif
+
                 <h3>
                   <a href="{{route('posts.show',['post'=>$post->id])}}">
                     @if($post->trashed())
@@ -27,19 +34,12 @@
                   </a>
                 </h3>
               @if($post->comments_count)
-
                     <p class="badge badge-success">{{$post->comments_count}} comments</p>
-
               @else
-
                     <p class="badge badge-danger">  no comment</p>
-
               @endif
-              <p>
-                <div class='text-muted'>
-                  {{$post->updated_at->diffForHumans()}} by {{$post->user->name}}
-                </div>
-              </p>
+
+                <x-updated :date="$post->updated_at"  :name="$post->user->name" ></x-updated>
 
               @can('update' , $post)
                 <a class="btn btn-warning" href="{{route('posts.edit',['post'=>$post->id])}}">
@@ -48,7 +48,7 @@
               @endcan
 
               @cannot('delete', $post)
-                  <span class="badge badge-danger">You can't delete this post !</span>
+                <x-badge type="danger"> You can't delete this post !</x-badge>
               @endcannot
                 @if(!$post->deleted_at)
                 @can('delete',$post )
@@ -77,10 +77,8 @@
                @endif
             </p>
             @empty
-
-            <span class="badge badge-danger">posts is empty </span>
+                 <x-badge type="success">You can't delete this post !</x-badge>
             @endforelse
-
 
         </div>
     <div class="col-4">
@@ -90,51 +88,27 @@
             </div>
             <ul class="list-group list-group-flush">
                 @foreach ($mostCommented as $post)
-
-                 <li class="list-group-item">
-                     <span class="badge badge-success">{{$post->comments_count}}</span>
+                  <li class="list-group-item">
+                      <x-badge type="dark">{{$post->comments_count}}</x-badge>
                      <a href="http://">{{$post->title}}</a>
-
-                </li>
-
+                  </li>
                 @endforeach
             </ul>
 
         </div>
 
-        <div class="card mt-4">
-            <div class="card-body">
-                <h4 class="card-title">User most Postd</h4>
-            </div>
-            <ul class="list-group list-group-flush">
-                @foreach ($mostUsersActive as $user)
+    <x-card
+      title ="Most Users"
+      text  ="Most Users post writen"
+      :items="collect($mostUsersActive)->pluck('name')">
+    </x-card>
 
-                 <li class="list-group-item">
-                     <span class="badge badge-info">{{$user->posts_count}}</span>
-                     <a href="http://">{{$user->name}}</a>
+    <x-card
+      title  = "Most Users Active"
+      text   = "Most Users Active In Last Month"
+      :items =  "collect($usersActiveInLastMonth)->pluck('name')">
+    </x-card>
 
-                </li>
-
-                @endforeach
-            </ul>
-        </div>
-
-        <div class="card mt-4">
-            <div class="card-body">
-                <h4 class="card-title">Users Active In LastMonth</h4>
-            </div>
-            <ul class="list-group list-group-flush">
-                @foreach ($usersActiveInLastMonth as $user)
-
-                 <li class="list-group-item">
-                     <span class="badge badge-info">{{$user->posts_count}}</span>
-                     <a href="http://">{{$user->name}}</a>
-
-                </li>
-
-                @endforeach
-            </ul>
-        </div>
     </div>
 </div>
 
