@@ -7,8 +7,9 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePost;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Cache;
 
 class PostController extends Controller
 {
@@ -29,14 +30,18 @@ class PostController extends Controller
          /*
             $posts = [Post::withCount('comments')]== bulder->orderBy('updated_at','desc')->get();
          */
-        $posts = Post::withCount('comments')->get();
+
+
+        $posts = Cache::remember('posts',now()->addSeconds(10), function () {
+                return   Post::withCount('comments')->with('user')->get();
+        });
         //mostCommented function you will find it in  model Post
+
         $mostCommented = Post::mostCommented()->take(5)->get();
         $mostUsersActive=User::usersActive()->take(5)->get();
-        $tab='list';
         $usersActiveInLastMonth=User::usersActiveInLastMonth()->take(5)->get();
 
-        return view('posts.index',compact('posts','tab','mostCommented','mostUsersActive','usersActiveInLastMonth'));
+        return view('posts.index',compact('posts','mostCommented','mostUsersActive','usersActiveInLastMonth'));
     }
 
 
@@ -104,7 +109,9 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = Post::find($id);
+        $post = Cache::remember("posts-show-{$id}" , 60 ,function() use($id){
+            return Post::findOrFail($id);
+              });
         return view('posts.show',compact('post'));
     }
 
@@ -137,7 +144,7 @@ class PostController extends Controller
         $post->save();
 
         $request->session()->flash('status',$post->title.' was updated seccefuly');
-        return  redirect()->route('posts.index');
+        return  redirect()->route('posts.show',['post'=>$id]);
     }
 
     /**

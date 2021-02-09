@@ -4,11 +4,6 @@
 
 <div class="row">
     <div class="col-8">
-        {{-- <nav class="nav nav-tabs nav-stacked my-5">
-            <a class="nav-link @if($tab== 'list') active @endif" href="/posts">List</a>
-            <a class="nav-link @if($tab== 'archive') active @endif" href="/posts/archive">Archive</a>
-            <a class="nav-link @if($tab== 'all') active @endif" href="/posts/all"> All</a>
-        </nav> --}}
         <div class="my-3">
             <h4>{{$posts->count()}} post(s)</h4>
         </div>
@@ -41,6 +36,7 @@
 
                 <x-updated :date="$post->updated_at"  :name="$post->user->name" ></x-updated>
 
+            @auth
               @can('update' , $post)
                 <a class="btn btn-warning" href="{{route('posts.edit',['post'=>$post->id])}}">
                     Edite this post
@@ -75,6 +71,7 @@
                   </form>
                 @endcan
                @endif
+             @endauth
             </p>
             @empty
                  <x-badge type="success">You can't delete this post !</x-badge>
